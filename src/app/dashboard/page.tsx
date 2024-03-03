@@ -30,13 +30,10 @@ export default function Dashboard() {
       startTransition(async () => {
         await deleteFile({ id });
         setFiles(await getUserFiles());
-        // setCurrentlyDeletingFile(null);
       });
     } catch (error) {
       console.log(error);
       throw error;
-    } finally {
-      // setCurrentlyDeletingFile(null);
     }
   }
 
