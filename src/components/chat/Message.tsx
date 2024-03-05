@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import React from "react";
+import React, { forwardRef } from "react";
 import { Icon } from "../Icon";
 import ReactMarkdown from "react-markdown";
 import { format } from "date-fns";
@@ -14,10 +14,12 @@ type MessageProps = {
   isNextMessageSamePerson: boolean;
 };
 
-function Message({ message, isNextMessageSamePerson }: MessageProps) {
+const Message = ({ message, isNextMessageSamePerson }: MessageProps) => {
   return (
     <div
-      className={cn("flex items-end", { "justify-end": message.isUserMessage })}
+      className={cn("flex items-end", {
+        "justify-end": message.isUserMessage,
+      })}
     >
       <div
         className={cn(
@@ -32,7 +34,7 @@ function Message({ message, isNextMessageSamePerson }: MessageProps) {
         {message.isUserMessage ? (
           <Icon.user className="fill-zinc-200 h-3/4 w-3/4 text-zinc-200" />
         ) : (
-          <Icon.logo className="fill-zinc-300 h-3/4 w-3/4" />
+          <Icon.logo className="fill-zinc-300 h-3/4 w-3/4 rounded-sm" />
         )}
       </div>
 
@@ -78,6 +80,8 @@ function Message({ message, isNextMessageSamePerson }: MessageProps) {
       </div>
     </div>
   );
-}
+};
+
+Message.displayName = "Message";
 
 export default Message;

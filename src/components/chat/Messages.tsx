@@ -1,8 +1,9 @@
 import { getFileMessages } from "@/actions/files/getFileMessages";
-import { INFINITE_QUERY_LIMIT } from "@/config/infiniteQueries";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2, MessageSquare } from "lucide-react";
+import { useContext } from "react";
 import Skeleton from "react-loading-skeleton";
+import { ChatContext } from "./ChatContext";
 import Message from "./Message";
 
 type MessageProps = {
@@ -12,10 +13,11 @@ type MessageProps = {
 };
 
 function Messages({ fileId }: MessageProps) {
-  const { data, isLoading, fetchNextPage } = useInfiniteQuery({
+  const { isLoading: isAiThinking } = useContext(ChatContext);
+
+  const { data, isLoading } = useInfiniteQuery({
     queryKey: ["getMessages"],
-    queryFn: () => getFileMessages({ fileId, limit: INFINITE_QUERY_LIMIT }),
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    queryFn: async () => await getFileMessages({ fileId }),
     keepPreviousData: true,
   });
 
@@ -33,7 +35,7 @@ function Messages({ fileId }: MessageProps) {
   };
 
   const combinedMessages = [
-    ...(true ? [loadingMessage] : []),
+    ...(isAiThinking ? [loadingMessage] : []),
     ...(messages ?? []),
   ];
 

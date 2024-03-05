@@ -14,7 +14,7 @@ async function Navbar() {
       <MaxWidthWrapper>
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex z-40 font-semibold">
-            PDF-GPT
+            PDFChat
           </Link>
 
           {/* TODO: add mobile navbar */}
@@ -22,12 +22,6 @@ async function Navbar() {
           {!session && (
             <div className="hidden items-center space-x-4 sm:flex">
               <>
-                <Link
-                  href="/pricing"
-                  className={buttonVariants({ variant: "ghost", size: "sm" })}
-                >
-                  Pricing
-                </Link>
                 <LoginButton>
                   <Button variant="secondary">Log in</Button>
                 </LoginButton>
