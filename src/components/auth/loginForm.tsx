@@ -38,10 +38,14 @@ export function LoginForm() {
     setError("");
 
     startTransition(() => {
-      login(values).then((data) => {
-        if (data.error) setError(data.error);
-        else setSuccess(data.success);
-      });
+      login(values)
+        .then((data) => {
+          setSuccess(data.success);
+        })
+        .catch(() => {
+          setError("Error logging in user");
+        })
+        .finally(() => console.log("login complete"));
     });
   };
 
