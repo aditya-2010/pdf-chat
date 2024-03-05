@@ -25,5 +25,5 @@ export async function register(values: z.infer<typeof RegisterSchema>) {
     data: { name, email, password: hashedPassword },
   });
 
-  return { success: "Email sent!" };
+  return { success: "Registration successful, you can now login!" };
 }

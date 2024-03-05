@@ -33,5 +33,5 @@ export async function login(values: z.infer<typeof LoginSchema>) {
     throw error;
   }
 
-  return { success: "Email sent!" };
+  return { success: "Login Successful" };
 }
