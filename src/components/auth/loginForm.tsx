@@ -37,13 +37,13 @@ export function LoginForm() {
     setSuccess("");
     setError("");
 
-    startTransition(() => {
-      login(values)
-        .then((data) => {
-          setSuccess(data.success);
+    startTransition(async () => {
+      await login(values)
+        .then(() => {
+          setSuccess("Login successful ");
         })
-        .catch(() => {
-          setError("Error logging in user");
+        .catch((err) => {
+          setError("Error logging in user" + err);
         })
         .finally(() => console.log("login complete"));
     });
