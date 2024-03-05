@@ -9,6 +9,7 @@ import {
 
 const { auth } = NextAuth(authConfig);
 
+// @ts-ignore
 export default auth((req) => {
   const { nextUrl } = req;
   const isLogged = !!req.auth;
