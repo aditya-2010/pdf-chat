@@ -6,10 +6,26 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { useUploadThing } from "@/lib/uploadthing";
-import { File, Loader2, UploadCloud } from "lucide-react";
+import { UploadStatus } from "@prisma/client";
+import { File, FileType, Loader2, UploadCloud } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
+
+type FileTypee =
+  | {
+      id: string;
+      name: string;
+      uploadStatus: UploadStatus;
+      url: string;
+      key: string;
+      createdAt: Date;
+      updatedAt: Date;
+      userId: string | null;
+    }
+  | {
+      error: string;
+    };
 
 function UploadDropzone() {
   const [isUploading, setIsUploading] = useState(false);
@@ -66,7 +82,14 @@ function UploadDropzone() {
 
         // save file info to db
         const file = await getFile({ key });
+        // @ts-ignore
         if (file && file.id) router.push(`/dashboard/${file.id}`);
+        else
+          return toast({
+            title: "Something went wrong",
+            description: "File ID not found",
+            variant: "destructive",
+          });
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
