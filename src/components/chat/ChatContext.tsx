@@ -80,8 +80,8 @@ export const ChatContextProvider = ({ fileId, children }: ProviderProps) => {
       setIsLoading(true);
 
       return {
-        previousMessages:
-          previousMessages?.pages.flatMap((page: any) => page.messgaes) ?? [],
+        previousMessages: [],
+        // previousMessages?.pages.flatMap((page: any) => page.messgaes) ?? [],
       };
     },
     onSuccess: async (stream) => {
