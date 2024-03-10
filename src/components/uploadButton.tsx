@@ -60,9 +60,11 @@ function UploadDropzone() {
         // handle file upload
         const res = await startUpload(acceptedFile);
         if (!res) {
+          setIsUploading(false);
+          clearInterval(progressInterval);
           return toast({
             title: "Something went wrong!",
-            description: "Please try again later",
+            description: "Please upload a valid PDF file",
             variant: "destructive",
           });
         }
@@ -70,6 +72,8 @@ function UploadDropzone() {
         const [fileResponse] = res;
         const key = fileResponse.key;
         if (!key) {
+          setIsUploading(false);
+          clearInterval(progressInterval);
           return toast({
             title: "Something went wrong!",
             description: "Please try again later",

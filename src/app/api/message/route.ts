@@ -1,12 +1,12 @@
-import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { openai } from "@/lib/openai";
 import { pinecone } from "@/lib/pinecone";
-import { PineconeStore } from "@langchain/pinecone";
 import { OpenAIEmbeddings } from "@langchain/openai";
+import { PineconeStore } from "@langchain/pinecone";
+import { OpenAIStream, StreamingTextResponse } from "ai";
+import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import { z } from "zod";
-import { OpenAIStream, StreamingTextResponse } from "ai";
 
 const SendMessageValidator = z.object({
   fileId: z.string(),
@@ -14,17 +14,9 @@ const SendMessageValidator = z.object({
 });
 
 export const POST = async (req: NextRequest) => {
-  const session = await auth();
+  const userId = cookies().get("session")?.value;
 
-  if (!session?.user) return new Response("Unauthorized", { status: 401 });
-
-  const user = await db.user.findFirst({
-    where: { email: session.user.email },
-  });
-
-  if (!user) return new Response("Unauthorized", { status: 401 });
-
-  const userId = user.id;
+  if (!userId) return new Response("Unauthorized", { status: 401 });
 
   const body = await req.json();
 

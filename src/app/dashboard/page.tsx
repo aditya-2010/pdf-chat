@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
-import { getUserFiles } from "@/actions/files/getUserFiles";
-import UploadButton from "@/components/uploadButton";
-import { Ghost, Loader2, MessageSquare, Plus, Trash } from "lucide-react";
-import Skeleton from "react-loading-skeleton";
-import Link from "next/link";
-import { format } from "date-fns";
-import { Button } from "@/components/ui/button";
 import { deleteFile } from "@/actions/files/deleteFile";
+import { getUserFiles } from "@/actions/files/getUserFiles";
+import { Button } from "@/components/ui/button";
+import UploadButton from "@/components/uploadButton";
 import { File } from "@prisma/client";
+import { format } from "date-fns";
+import { Ghost, Loader2, Plus, Trash } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState, useTransition } from "react";
+import Skeleton from "react-loading-skeleton";
 
 export default function Dashboard() {
   const [isPending, startTransition] = useTransition();
@@ -72,20 +72,16 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </Link>
-                <div className="px-6 mt-4 grid grid-cols-3 place-items-center py-2 gap-6 text-xs text-zinc-500">
+                <div className="px-6 mt-4 flex items-center justify-around py-2 gap-6 text-xs text-zinc-500">
                   <div className="flex items-center gap-2">
                     <Plus className="h-4 w-4" />
                     {format(new Date(file.createdAt), "MMM yyyy")}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4" />
-                    mocked
                   </div>
 
                   <Button
                     onClick={() => handleDelete(file.id)}
                     size="sm"
-                    className="w-full"
+                    className="w-16"
                     variant="destructive"
                     disabled={currentlyDeletingFile === file.id}
                   >

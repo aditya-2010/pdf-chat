@@ -1,5 +1,3 @@
-import authConfig from "./auth.config";
-import NextAuth from "next-auth";
 import {
   publicRoutes,
   authRoutes,
@@ -7,12 +5,14 @@ import {
   DEFAULT_LOGIN_REDIRECT,
 } from "@/routes";
 
-const { auth } = NextAuth(authConfig);
+// import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-// @ts-ignore
-export default auth((req) => {
-  const { nextUrl } = req;
-  const isLogged = !!req.auth;
+export function middleware(request: NextRequest) {
+  const session = request.cookies.get("session");
+  const isLogged = !!session?.value;
+
+  const { nextUrl } = request;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
@@ -27,12 +27,13 @@ export default auth((req) => {
   }
 
   if (!isLogged && !isPublicRoute)
-    return Response.redirect(new URL("/auth/login", nextUrl));
+    // TODO: after adding auth page, change to /auth/login
+    return Response.redirect(new URL("/", nextUrl));
 
   return null;
-});
+}
 
-// Optionally, don't invoke Middleware on some paths
+// // Optionally, don't invoke Middleware on some paths
 export const config = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };

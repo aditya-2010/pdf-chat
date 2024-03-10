@@ -1,14 +1,12 @@
 "use server";
 
-import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { cookies } from "next/headers";
 
 export async function getUserFiles() {
-  const session = await auth();
+  const userId = cookies().get("session")?.value;
 
-  if (!session?.user) return null;
+  if (!userId) return null;
 
-  const { id } = session.user;
-
-  return await db.file.findMany({ where: { id } });
+  return await db.file.findMany({ where: { userId } });
 }

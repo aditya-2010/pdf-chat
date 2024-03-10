@@ -1,9 +1,9 @@
-import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { pinecone } from "@/lib/pinecone";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import { cookies } from "next/headers";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
@@ -12,17 +12,11 @@ const f = createUploadthing();
 export const ourFileRouter = {
   pdfUploader: f({ pdf: { maxFileSize: "4MB" } })
     .middleware(async ({ req }) => {
-      const session = await auth();
+      const userId = cookies().get("session")?.value;
 
-      if (!session?.user) throw new UploadThingError("Unauthorized");
+      if (!userId) throw new UploadThingError("Unauthorized");
 
-      const user = await db.user.findFirst({
-        where: { email: session.user.email },
-      });
-
-      if (!user?.id) throw new UploadThingError("Unauthorized");
-
-      return { userId: user.id };
+      return { userId };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       const createdFile = await db.file.create({
@@ -42,7 +36,6 @@ export const ourFileRouter = {
         const loader = new PDFLoader(blob);
 
         const pageLevelDocs = await loader.load();
-        const pagesAmt = pageLevelDocs.length;
 
         // vectorize and index the doc
         const pineconeIndex = pinecone.Index("pdf-gpt");

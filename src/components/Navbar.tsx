@@ -1,13 +1,45 @@
-import { ArrowRight } from "lucide-react";
-import { LuLogOut } from "react-icons/lu";
-import Link from "next/link";
-import MaxWidthWrapper from "./MaxWidthWrapper";
-import LoginButton from "./auth/loginButton";
-import { Button, buttonVariants } from "./ui/button";
-import { auth, signOut } from "@/auth";
+"use client";
 
-async function Navbar() {
-  const session = await auth();
+import { useAuth } from "@/context/AuthContext";
+import Link from "next/link";
+import { FaGoogle } from "react-icons/fa";
+import { LuLogOut } from "react-icons/lu";
+import MaxWidthWrapper from "./MaxWidthWrapper";
+import { Button } from "./ui/button";
+import { useToast } from "./ui/use-toast";
+
+function Navbar() {
+  const { user, googleSignIn, logOut } = useAuth();
+
+  const toast = useToast();
+
+  const handleLogin = async () => {
+    try {
+      await googleSignIn();
+    } catch (error) {
+      logOut();
+      console.log(error);
+      toast.toast({
+        title: "Error signing in",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      console.log("logging out");
+    } catch (error) {
+      console.log(error);
+      toast.toast({
+        title: "Something went wrong",
+        description: "Could not Log out",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <nav className="sticky inset-x-0 top-0 z-30 h-16 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -17,36 +49,20 @@ async function Navbar() {
             PDFChat
           </Link>
 
+          {!user.id ? (
+            <Button onClick={handleLogin}>
+              <span className="mr-1">Log In with</span>{" "}
+              <FaGoogle className="w-4 h-4" />
+            </Button>
+          ) : (
+            <Button variant="secondary" onClick={handleLogout}>
+              Logout <LuLogOut className="ml-1 w-4 h-4" />
+            </Button>
+          )}
+
           {/* TODO: add mobile navbar */}
 
-          {!session && (
-            <div className="hidden items-center space-x-4 sm:flex">
-              <>
-                <LoginButton>
-                  <Button variant="secondary">Log in</Button>
-                </LoginButton>
-                <Link href="/auth/register">
-                  <Button>
-                    Get Started <ArrowRight className="ml-1 w-5 h-5" />
-                  </Button>
-                </Link>
-              </>
-            </div>
-          )}
-          {session && (
-            <div>
-              <form
-                action={async () => {
-                  "use server";
-                  await signOut();
-                }}
-              >
-                <Button variant="secondary">
-                  Sign Out <LuLogOut className="ml-1 w-5 h-5" />
-                </Button>
-              </form>
-            </div>
-          )}
+          {/* TODO: add email login */}
         </div>
       </MaxWidthWrapper>
     </nav>

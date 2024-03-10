@@ -1,7 +1,7 @@
 "use server";
 
-import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { cookies } from "next/headers";
 import { z } from "zod";
 
 const InputSchema = z.object({
@@ -11,13 +11,8 @@ const InputSchema = z.object({
 export async function getFileMessages(input: z.infer<typeof InputSchema>) {
   const { fileId } = input;
 
-  const session = await auth();
-  if (!session?.user) return { error: "Unauthorized" };
-
-  const user = await db.user.findFirst({
-    where: { email: session.user.email },
-  });
-  const userId = user?.id;
+  const userId = cookies().get("session")?.value;
+  if (!userId) return { error: "Unauthorized" };
 
   const file = await db.file.findFirst({
     where: { id: fileId, userId },

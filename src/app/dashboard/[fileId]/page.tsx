@@ -1,9 +1,9 @@
-import { auth } from "@/auth";
-import { db } from "@/lib/db";
-import { notFound, redirect } from "next/navigation";
-import PdfRenderer from "@/components/pdfRenderer";
-import ChatWrapper from "@/components/chat/ChatWrapper";
 import { Provider } from "@/components/Provider";
+import ChatWrapper from "@/components/chat/ChatWrapper";
+import PdfRenderer from "@/components/pdfRenderer";
+import { db } from "@/lib/db";
+import { cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
 
 type PageProps = {
   params: { fileId: string };
@@ -11,12 +11,12 @@ type PageProps = {
 
 async function Page({ params }: PageProps) {
   const { fileId } = params;
+  const userId = cookies().get("session")?.value;
 
-  const session = await auth();
-  if (!session?.user) redirect("/auth/login"); // needed?
+  if (!userId) redirect("/");
 
   const file = await db.file.findFirst({
-    where: { id: fileId, userId: session?.user?.id },
+    where: { id: fileId, userId },
   });
 
   if (!file) notFound();
