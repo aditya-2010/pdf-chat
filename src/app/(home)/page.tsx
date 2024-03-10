@@ -1,13 +1,14 @@
 "use client";
 
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/context/AuthContext";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
-  const { googleSignIn, logOut } = useAuth();
+  const { googleSignIn, logOut, user } = useAuth();
   const { toast } = useToast();
 
   const handleLogin = async () => {
@@ -40,9 +41,21 @@ export default function Home() {
           PDFChat allows you to have conversations with any PDF document. Simply
           upload your file and start asking questions right away.
         </p>
-        <Button className="mt-5 text-lg" size="lg" onClick={handleLogin}>
-          Get started <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
+        {!user.id ? (
+          <Button className="mt-5 text-lg" size="lg" onClick={handleLogin}>
+            Get started <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
+        ) : (
+          <Link
+            className={buttonVariants({
+              className: "mt-5 text-lg",
+              size: "lg",
+            })}
+            href="/dashboard"
+          >
+            Go to Dashboard
+          </Link>
+        )}
       </MaxWidthWrapper>
     </>
   );

@@ -5,13 +5,17 @@ import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
 import MaxWidthWrapper from "./MaxWidthWrapper";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { useToast } from "./ui/use-toast";
+import { usePathname } from "next/navigation";
 
 function Navbar() {
   const { user, googleSignIn, logOut } = useAuth();
 
   const toast = useToast();
+
+  const pathname = usePathname();
+  console.log(pathname);
 
   const handleLogin = async () => {
     try {
@@ -48,19 +52,31 @@ function Navbar() {
           <Link href="/" className="flex z-40 font-semibold">
             PDFChat
           </Link>
-
-          {!user.id ? (
-            <Button onClick={handleLogin}>
-              <span className="mr-1">Log In with</span>{" "}
-              <FaGoogle className="w-4 h-4" />
-            </Button>
-          ) : (
-            <Button variant="secondary" onClick={handleLogout}>
-              Logout <LuLogOut className="ml-1 w-4 h-4" />
-            </Button>
-          )}
-
-          {/* TODO: add mobile navbar */}
+          <div>
+            {!user.id ? (
+              <Button onClick={handleLogin}>
+                <span className="mr-1">Log In with</span>{" "}
+                <FaGoogle className="w-4 h-4" />
+              </Button>
+            ) : (
+              <>
+                {pathname === "/" ? (
+                  <Link
+                    className={buttonVariants({
+                      variant: "default",
+                      className: "mr-4",
+                    })}
+                    href="/dashboard"
+                  >
+                    Go to Dashboard
+                  </Link>
+                ) : null}
+                <Button variant="secondary" onClick={handleLogout}>
+                  Logout <LuLogOut className="ml-1 w-4 h-4" />
+                </Button>
+              </>
+            )}
+          </div>
 
           {/* TODO: add email login */}
         </div>
