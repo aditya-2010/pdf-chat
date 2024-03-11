@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     });
 
     if (response.status === 200) {
-      router.push("/");
+      console.log("User logged out");
     } else console.log("Error logging out from server");
 
     setUser({ id: "", email: "", name: "User" });
@@ -81,19 +81,27 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
           });
         }
 
-        // create user session in server
+        // create user session in browser cookie
         await fetch("/api/auth/login", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${await currUser.getIdToken()}`,
           },
-        }).then((response) => {
-          if (response.status === 200) {
-            router.push("/dashboard");
-          }
-        });
+        })
+          .then((response) => {
+            if (response.status === 200) {
+              console.log("User session created");
+            }
+          })
+          .catch((err) => {
+            console.log("Error creating session", err);
+          });
+
+        // redirect after successful login
+        router.push("/dashboard");
       } else {
         setUser({ id: "", email: "", name: "User" });
+        router.push("/");
       }
     });
 

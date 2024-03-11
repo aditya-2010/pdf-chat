@@ -15,7 +15,6 @@ function Navbar() {
   const toast = useToast();
 
   const pathname = usePathname();
-  console.log(pathname);
 
   const handleLogin = async () => {
     try {

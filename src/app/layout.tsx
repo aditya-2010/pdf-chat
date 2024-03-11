@@ -3,7 +3,6 @@ import { AuthProvider } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "simplebar-react/dist/simplebar.min.css";
 
 export const metadata: Metadata = {
   title: "PDFChat by Aditya Nakadi",
