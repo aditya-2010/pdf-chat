@@ -7,8 +7,8 @@ This is a repository for PDFChat application built With Nextjs, Tailwind, Shandc
 Features:
 
 - 🌐 Next.js 14 framework
-- 🔐 Firebase Login using your Google account
 - 💅 TailwindCSS & ShadcnUI styling
+- 🔐 Clerk authentication & user management
 - 💾 Prisma ORM and PostgreSQL
 - ⬆️ PDF File upload using UploadThing
 - ⛓️ Langchain Framework
@@ -37,15 +37,12 @@ npm install
 ```js
 DATABASE_URL=
 DIRECT_URL=
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER=
-NEXT_PUBLIC_FIREBASE_APP_ID=
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
-NEXT_PUBLIC_FIREBASE_PRIVATE_KEY=
-NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL=
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
+NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/dashboard"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/dashboard"
 UPLOADTHING_SECRET=
 UPLOADTHING_APP_ID=
 PINECONE_API_KEY=

@@ -1,9 +1,9 @@
 import { db } from "@/lib/db";
 import { pinecone } from "@/lib/pinecone";
+import { auth } from "@clerk/nextjs";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { cookies } from "next/headers";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
@@ -12,7 +12,7 @@ const f = createUploadthing();
 export const ourFileRouter = {
   pdfUploader: f({ pdf: { maxFileSize: "4MB" } })
     .middleware(async ({ req }) => {
-      const userId = cookies().get("session")?.value;
+      const { userId } = auth();
 
       if (!userId) throw new UploadThingError("Unauthorized");
 

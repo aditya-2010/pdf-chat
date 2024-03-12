@@ -1,30 +1,11 @@
 "use client";
 
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-import { useAuth } from "@/context/AuthContext";
+import { buttonVariants } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
-  const { googleSignIn, logOut, user } = useAuth();
-  const { toast } = useToast();
-
-  const handleLogin = async () => {
-    try {
-      await googleSignIn();
-    } catch (error) {
-      logOut();
-      console.log(error);
-      toast({
-        title: "Error signing in",
-        description: "Please try again later",
-        variant: "destructive",
-      });
-    }
-  };
-
   return (
     <>
       <MaxWidthWrapper className="mb-12 mt-28 sm:mt-40 flex flex-col items-center justify-center text-center">
@@ -41,21 +22,13 @@ export default function Home() {
           PDFChat allows you to have conversations with any PDF document. Simply
           upload your file and start asking questions right away.
         </p>
-        {!user.id ? (
-          <Button className="mt-5 text-lg" size="lg" onClick={handleLogin}>
-            Get started <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-        ) : (
-          <Link
-            className={buttonVariants({
-              className: "mt-5 text-lg",
-              size: "lg",
-            })}
-            href="/dashboard"
-          >
-            Go to Dashboard
-          </Link>
-        )}
+
+        <Link
+          href="/sign-up"
+          className={buttonVariants({ size: "lg", className: "mt-6" })}
+        >
+          Get started <ArrowRight className="ml-2 h-5 w-5" />
+        </Link>
       </MaxWidthWrapper>
     </>
   );

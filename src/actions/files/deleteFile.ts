@@ -1,10 +1,10 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { cookies } from "next/headers";
+import { auth } from "@clerk/nextjs";
 
 export async function deleteFile(inputFileObject: { id: string }) {
-  const userId = cookies().get("session")?.value || "";
+  const { userId } = auth();
 
   if (!userId) return null;
 

@@ -2,8 +2,8 @@ import { Provider } from "@/components/Provider";
 import ChatWrapper from "@/components/chat/ChatWrapper";
 import PdfRenderer from "@/components/pdfRenderer";
 import { db } from "@/lib/db";
-import { cookies } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs";
+import { notFound } from "next/navigation";
 
 type PageProps = {
   params: { fileId: string };
@@ -11,9 +11,7 @@ type PageProps = {
 
 async function Page({ params }: PageProps) {
   const { fileId } = params;
-  const userId = cookies().get("session")?.value;
-
-  if (!userId) redirect("/");
+  const { userId } = auth();
 
   const file = await db.file.findFirst({
     where: { id: fileId, userId },

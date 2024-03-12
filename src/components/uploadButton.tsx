@@ -6,26 +6,10 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { useUploadThing } from "@/lib/uploadthing";
-import { UploadStatus } from "@prisma/client";
-import { File, FileType, Loader2, UploadCloud } from "lucide-react";
+import { File, Loader2, UploadCloud } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
-
-type FileTypee =
-  | {
-      id: string;
-      name: string;
-      uploadStatus: UploadStatus;
-      url: string;
-      key: string;
-      createdAt: Date;
-      updatedAt: Date;
-      userId: string | null;
-    }
-  | {
-      error: string;
-    };
 
 function UploadDropzone() {
   const [isUploading, setIsUploading] = useState(false);

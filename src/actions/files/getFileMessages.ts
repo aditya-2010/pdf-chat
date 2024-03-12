@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { cookies } from "next/headers";
+import { auth } from "@clerk/nextjs";
 import { z } from "zod";
 
 const InputSchema = z.object({
@@ -11,7 +11,7 @@ const InputSchema = z.object({
 export async function getFileMessages(input: z.infer<typeof InputSchema>) {
   const { fileId } = input;
 
-  const userId = cookies().get("session")?.value;
+  const { userId } = auth();
   if (!userId) return { error: "Unauthorized" };
 
   const file = await db.file.findFirst({

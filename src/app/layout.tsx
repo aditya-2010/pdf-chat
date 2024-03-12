@@ -1,6 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -24,10 +24,10 @@ export default function RootLayout({
           inter.className
         )}
       >
-        <AuthProvider>
+        <ClerkProvider>
           {children}
           <Toaster />
-        </AuthProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

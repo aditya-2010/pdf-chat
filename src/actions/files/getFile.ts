@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { cookies } from "next/headers";
+import { auth } from "@clerk/nextjs";
 import * as z from "zod";
 
 const InputSchema = z.object({
@@ -9,7 +9,7 @@ const InputSchema = z.object({
 });
 
 export async function getFile(input: z.infer<typeof InputSchema>) {
-  const userId = cookies().get("session")?.value;
+  const { userId } = auth();
 
   if (!userId) return null;
 
