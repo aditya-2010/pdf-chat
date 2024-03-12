@@ -2,10 +2,13 @@
 
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { buttonVariants } from "@/components/ui/button";
+import { useAuth } from "@clerk/nextjs";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
+  const { userId } = useAuth();
+
   return (
     <>
       <MaxWidthWrapper className="mb-12 mt-28 sm:mt-40 flex flex-col items-center justify-center text-center">
@@ -24,10 +27,11 @@ export default function Home() {
         </p>
 
         <Link
-          href="/sign-up"
+          href={userId ? "/dashboard" : "/sign-up"}
           className={buttonVariants({ size: "lg", className: "mt-6" })}
         >
-          Get started <ArrowRight className="ml-2 h-5 w-5" />
+          <span>{userId ? "Go to Dashboard" : "Get started"}</span>{" "}
+          <ArrowRight className="ml-2 h-5 w-5" />
         </Link>
       </MaxWidthWrapper>
     </>
