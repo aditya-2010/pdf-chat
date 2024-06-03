@@ -93,8 +93,11 @@ function UploadDropzone() {
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <UploadCloud className="h-6 w-6 text-zinc-500 mb-2" />
                 <p className="mb-2 text-sm text-zinc-700">
-                  <span className="font-semibold">Click to upload</span> or drag
-                  and drop
+                  <span className="font-semibold">
+                    Drag & Drop PDF file here
+                  </span>
+                  <br />
+                  (do not click to upload)
                 </p>
                 <p className="text-xs text-zinc-500">PDF (up to 4MB)</p>
               </div>
